@@ -28,7 +28,7 @@ public class OrderControllerTest {
     HttpClient client;
 
     @Test
-    public void testFindNonExistingGenreReturns404() {
+    public void testFindNonExistingReturns404() {
         HttpClientResponseException thrown = assertThrows(HttpClientResponseException.class, () -> {
             client.toBlocking().exchange(HttpRequest.GET("/order/10000000"));
         });
