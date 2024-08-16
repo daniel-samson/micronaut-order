@@ -1,5 +1,7 @@
 package media.samson.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 
@@ -14,8 +16,12 @@ public class Order {
         // Properties
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
+        @Getter
+        @Setter
         private BigInteger orderId;
 
+        @Getter
+        @Setter
         @Enumerated(EnumType.STRING)
         private Status status;
 
@@ -28,23 +34,6 @@ public class Order {
 
         public Order(BigInteger orderId, Status status) {
                 this.orderId = orderId;
-                this.status = status;
-        }
-
-        // Getters and Setters
-        public BigInteger getOrderId() {
-                return orderId;
-        }
-
-        public void setOrderId(BigInteger orderId) {
-                this.orderId = orderId;
-        }
-
-        public Status getStatus() {
-                return status;
-        }
-
-        public void setStatus(Status status) {
                 this.status = status;
         }
 
