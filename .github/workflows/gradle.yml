@@ -17,9 +17,9 @@ jobs:
           container port: 3307
           mysql version: '8.0'
           mysql database: 'order'
-          mysql root password: ${{ secrets.RootPassword }}
+          mysql root password: ${{ secrets.ROOTPASSWORD }}
           mysql user: 'order'
-          mysql password: ${{ secrets.DatabasePassword }}
+          mysql password: ${{ secrets.DATABASEPASSWORD }}
       - uses: actions/checkout@v4
       - name: Set up JDK 22
         uses: actions/setup-java@v4
