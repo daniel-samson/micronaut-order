@@ -1,3 +1,30 @@
+Micronaut Order
+====
+A micro service to manage orders, written with the Micronaut Framework.
+
+
+## Requirements
+- Java 22 Runtime / SDK
+- Gradle
+- Docker Compose
+
+### Getting Started
+Before running the applications, you will need to start up the databases via docker compose:
+```bash
+docker compose up -d
+```
+
+To run the tests, run the gradle command:
+```bash
+gradle test
+```
+
+To start the application, run the gradle command
+```bash
+gradle run
+```
+
+
 ## Micronaut 4.5.1 Documentation
 
 - [User Guide](https://docs.micronaut.io/4.5.1/guide/index.html)
