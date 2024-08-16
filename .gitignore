@@ -13,3 +13,5 @@ out/
 .settings
 .classpath
 .factorypath
+mysql-data/
+mysql-test-data/
