@@ -42,8 +42,8 @@ public class OrderControllerTest {
 
         List<BigInteger> orderIds = new ArrayList<>();
 
-        HttpRequest<?> request = HttpRequest.POST("/order", Collections.singletonMap("status", Order.Status.PENDING.name()));
-        HttpResponse<Order> createdResponse = client.toBlocking().exchange(request, Order.class);
+        HttpRequest<?> createRequest = HttpRequest.POST("/order", Collections.singletonMap("status", Order.Status.PENDING.name()));
+        HttpResponse<Order> createdResponse = client.toBlocking().exchange(createRequest, Order.class);
 
         assertEquals(HttpStatus.CREATED, createdResponse.getStatus());
         assertFalse(createdResponse.getBody().isEmpty());
@@ -51,47 +51,47 @@ public class OrderControllerTest {
         BigInteger id = createdResponse.getBody().get().getOrderId();
         orderIds.add(id);
 
-        request = HttpRequest.GET("/order/" + id);
-        Order order = client.toBlocking().retrieve(request, Order.class);
+        HttpRequest<?> readRequest = HttpRequest.GET("/order/" + id);
+        Order order = client.toBlocking().retrieve(readRequest, Order.class);
 
         assertEquals(Order.Status.PENDING, order.getStatus());
 
-        request = HttpRequest.PUT("/order", new Order(id, Order.Status.SHIPPED, new ArrayList<OrderLineItem>()));
-        HttpResponse<?> response = client.toBlocking().exchange(request);
+        HttpRequest<?> updateRequest = HttpRequest.PUT("/order", new Order(id, Order.Status.SHIPPED, new ArrayList<OrderLineItem>()));
+        HttpResponse<?> updateResponse = client.toBlocking().exchange(updateRequest);
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+        assertEquals(HttpStatus.NO_CONTENT, updateResponse.getStatus());
 
-        request = HttpRequest.GET("/order/" + id);
-        order = client.toBlocking().retrieve(request, Order.class);
+        HttpRequest<?> read2Request = HttpRequest.GET("/order/" + id);
+        order = client.toBlocking().retrieve(read2Request, Order.class);
 
         assertEquals(id, order.getOrderId());
         assertEquals(Order.Status.SHIPPED, order.getStatus());
 
-        request = HttpRequest.GET("/order");
-        List<Order> orders = client.toBlocking().retrieve(request, Argument.of(List.class, Order.class));
+        HttpRequest<?> listRequest = HttpRequest.GET("/order");
+        List<Order> orders = client.toBlocking().retrieve(listRequest, Argument.of(List.class, Order.class));
 
         assertEquals(1, orders.size());
 
-        request = HttpRequest.GET("/order?size=1");
-        orders = client.toBlocking().retrieve(request, Argument.of(List.class, Order.class));
+        HttpRequest<?> listSizeRequest = HttpRequest.GET("/order?size=1");
+        orders = client.toBlocking().retrieve(listSizeRequest, Argument.of(List.class, Order.class));
 
         assertEquals(1, orders.size());
         assertEquals(Order.Status.SHIPPED, orders.get(0).getStatus());
 
-        request = HttpRequest.GET("/order?size=1&sort=status,desc");
-        orders = client.toBlocking().retrieve(request, Argument.of(List.class, Order.class));
+        HttpRequest<?> listOrderRequest = HttpRequest.GET("/order?size=1&sort=status,desc");
+        orders = client.toBlocking().retrieve(listOrderRequest, Argument.of(List.class, Order.class));
 
         assertEquals(1, orders.size());
 
-        request = HttpRequest.GET("/order?size=1&page=2");
-        orders = client.toBlocking().retrieve(request, Argument.of(List.class, Order.class));
+        HttpRequest<?> listPageRequest = HttpRequest.GET("/order?size=1&page=2");
+        orders = client.toBlocking().retrieve(listPageRequest, Argument.of(List.class, Order.class));
 
         assertEquals(0, orders.size());
 
         // cleanup:
         for (BigInteger orderId : orderIds) {
-            request = HttpRequest.DELETE("/order/" + orderId);
-            response = client.toBlocking().exchange(request);
+            HttpRequest<?> request = HttpRequest.DELETE("/order/" + orderId);
+            HttpResponse<?> response = client.toBlocking().exchange(request);
             assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
         }
     }
