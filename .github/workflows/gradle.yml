@@ -18,7 +18,6 @@ jobs:
           container port: 3307
           mysql version: '8.0'
           mysql database: 'order'
-          mysql root password: 'root_password'
           mysql user: 'order'
           mysql password: 'secret'
       - uses: actions/checkout@v4
