@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import media.samson.entity.Order;
+import media.samson.repository.OrderLineItemRepository;
 import media.samson.repository.OrderRepository;
 
 import java.math.BigInteger;
@@ -19,8 +20,12 @@ public class OrderController {
     @Inject
     private final OrderRepository orderRepository;
 
-    public OrderController(OrderRepository orderRepository) {
+    @Inject
+    private final OrderLineItemRepository orderLineItemRepository;
+
+    public OrderController(OrderRepository orderRepository, OrderLineItemRepository orderLineItemRepository) {
         this.orderRepository = orderRepository;
+        this.orderLineItemRepository = orderLineItemRepository;
     }
 
     @Get
@@ -49,5 +54,11 @@ public class OrderController {
     @Status(HttpStatus.NO_CONTENT)
     public void delete(BigInteger id) {
         orderRepository.deleteById(id);
+    }
+
+    @Delete("/{orderId}/line-item/{orderLineItemId}")
+    @Status(HttpStatus.NO_CONTENT)
+    public void delete(BigInteger orderId, BigInteger orderLineItemId) {
+        orderLineItemRepository.deleteByOrderId(orderId, orderLineItemId);
     }
 }

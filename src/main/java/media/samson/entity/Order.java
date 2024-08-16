@@ -6,7 +6,7 @@ import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
-
+import java.util.List;
 
 
 @Serdeable
@@ -25,6 +25,11 @@ public class Order {
         @Enumerated(EnumType.STRING)
         private Status status;
 
+        @Getter
+        @Setter
+        @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        private List<OrderLineItem> lineItems;
+
         // Constructors
 
         public Order() {
@@ -32,9 +37,10 @@ public class Order {
                 this.status = Status.PENDING;
         }
 
-        public Order(BigInteger orderId, Status status) {
+        public Order(BigInteger orderId, Status status, List<OrderLineItem> orderLineItems) {
                 this.orderId = orderId;
                 this.status = status;
+                this.lineItems = orderLineItems;
         }
 
         public enum Status {

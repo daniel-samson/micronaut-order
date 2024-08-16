@@ -1,7 +1,6 @@
 package media.samson.controller;
 
 import io.micronaut.core.type.Argument;
-import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -11,6 +10,7 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import media.samson.entity.Order;
+import media.samson.entity.OrderLineItem;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -56,7 +56,7 @@ public class OrderControllerTest {
 
         assertEquals(Order.Status.PENDING, order.getStatus());
 
-        request = HttpRequest.PUT("/order", new Order(id, Order.Status.SHIPPED));
+        request = HttpRequest.PUT("/order", new Order(id, Order.Status.SHIPPED, new ArrayList<OrderLineItem>()));
         HttpResponse<?> response = client.toBlocking().exchange(request);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
@@ -94,5 +94,42 @@ public class OrderControllerTest {
             response = client.toBlocking().exchange(request);
             assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
         }
+    }
+
+    @Test
+    public void testOrderLineItemsCrud() {
+        ArrayList<OrderLineItem> initialLineItems = new ArrayList<OrderLineItem>();
+        initialLineItems.add(new OrderLineItem(1));
+        HttpRequest<?> createRequest = HttpRequest.POST(
+                "/order",
+                new Order(null, Order.Status.PENDING, initialLineItems));
+        HttpResponse<Order> createdResponse = client.toBlocking().exchange(createRequest, Order.class);
+        assertEquals(HttpStatus.CREATED, createdResponse.getStatus());
+        Order order = createdResponse.getBody().get();
+        assertEquals(1, order.getLineItems().size());
+        assertEquals(1, order.getLineItems().getFirst().getQuantity());
+
+        order.getLineItems().add(new OrderLineItem(2));
+        HttpRequest<?> updateRequest = HttpRequest.PUT("/order", order);
+        HttpResponse<?> updatedResponse = client.toBlocking().exchange(updateRequest, Order.class);
+        assertEquals(HttpStatus.NO_CONTENT, updatedResponse.getStatus());
+
+        HttpRequest<?> readRequest = HttpRequest.GET("/order/" + order.getOrderId());
+        Order readResponse = client.toBlocking().retrieve(readRequest, Order.class);
+
+        assertNotEquals(null, readResponse);
+        assertEquals(2, readResponse.getLineItems().size());
+
+        var url = "/order/" + order.getOrderId() + "/line-item/" + order.getLineItems().getFirst().getOrderLineItemId();
+        HttpRequest<?> deleteRequest = HttpRequest.DELETE(url);
+        HttpResponse<?> deleteResponse = client.toBlocking().exchange(deleteRequest);
+        assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatus());
+
+        HttpRequest<?> read2Request = HttpRequest.GET("/order/" + order.getOrderId());
+        Order read2Response = client.toBlocking().retrieve(readRequest, Order.class);
+
+        assertNotEquals(null, read2Response);
+        assertEquals(1, read2Response.getLineItems().size());
+        assertEquals(2, read2Response.getLineItems().getFirst().getQuantity());
     }
 }
