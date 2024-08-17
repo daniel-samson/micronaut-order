@@ -32,13 +32,15 @@ public class OrderLineItem {
         this.quantity = 0;
     }
 
-    public OrderLineItem(BigInteger orderLineItemId, Integer quantity) {
+    public OrderLineItem(BigInteger orderLineItemId, Integer quantity, VendorPart vendorPart) {
         this.orderLineItemId = orderLineItemId;
         this.quantity = quantity;
+        this.vendorPart = vendorPart;
     }
 
     public OrderLineItem(Integer quantity, VendorPart vendorPart) {
         this.orderLineItemId = null;
         this.quantity = quantity;
+        this.vendorPart = vendorPart;
     }
 }
