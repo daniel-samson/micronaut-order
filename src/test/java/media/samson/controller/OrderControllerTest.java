@@ -11,8 +11,11 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import media.samson.entity.Order;
 import media.samson.entity.OrderLineItem;
+import media.samson.entity.VendorPart;
+import media.samson.repository.VendorPartRepository;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,9 @@ public class OrderControllerTest {
     @Inject
     @Client("/")
     HttpClient client;
+
+    @Inject
+    VendorPartRepository vendorPartRepository;
 
     @Test
     public void testFindNonExistingReturns404() {
@@ -98,8 +104,11 @@ public class OrderControllerTest {
 
     @Test
     public void testOrderLineItemsCrud() {
+        var lemonadePart = vendorPartRepository.create(new VendorPart("Lemonade", "A fizzy lemon flavored drink", new BigDecimal("0.99")));
+        var colaPart = vendorPartRepository.create(new VendorPart("Cola", "A fizzy lemon drink", new BigDecimal("0.99")));
+
         ArrayList<OrderLineItem> initialLineItems = new ArrayList<OrderLineItem>();
-        initialLineItems.add(new OrderLineItem(1));
+        initialLineItems.add(new OrderLineItem(1, lemonadePart));
         HttpRequest<?> createRequest = HttpRequest.POST(
                 "/order",
                 new Order(null, Order.Status.PENDING, initialLineItems));
@@ -109,7 +118,7 @@ public class OrderControllerTest {
         assertEquals(1, order.getLineItems().size());
         assertEquals(1, order.getLineItems().getFirst().getQuantity());
 
-        order.getLineItems().add(new OrderLineItem(2));
+        order.getLineItems().add(new OrderLineItem(2, colaPart));
         HttpRequest<?> updateRequest = HttpRequest.PUT("/order", order);
         HttpResponse<?> updatedResponse = client.toBlocking().exchange(updateRequest, Order.class);
         assertEquals(HttpStatus.NO_CONTENT, updatedResponse.getStatus());

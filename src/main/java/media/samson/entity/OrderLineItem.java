@@ -21,6 +21,12 @@ public class OrderLineItem {
     @Setter
     private Integer quantity;
 
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "vendorPartId")
+    private VendorPart vendorPart;
+
     public OrderLineItem() {
         this.orderLineItemId = null;
         this.quantity = 0;
@@ -31,7 +37,7 @@ public class OrderLineItem {
         this.quantity = quantity;
     }
 
-    public OrderLineItem(Integer quantity) {
+    public OrderLineItem(Integer quantity, VendorPart vendorPart) {
         this.orderLineItemId = null;
         this.quantity = quantity;
     }
