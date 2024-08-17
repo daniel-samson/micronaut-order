@@ -6,8 +6,10 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import media.samson.dto.CreateVendor;
+import media.samson.dto.UpdateVendor;
 import media.samson.entity.Vendor;
-import media.samson.repository.VendorRepository;
+import media.samson.service.VendorService;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -16,36 +18,36 @@ import java.util.Optional;
 @Controller("/vendor")
 public class VendorController {
     @Inject
-    private final VendorRepository vendorRepository;
+    private final VendorService vendorService;
 
-    public VendorController(VendorRepository vendorRepository) {
-        this.vendorRepository = vendorRepository;
-    }
+  public VendorController(VendorService vendorService) {
+      this.vendorService = vendorService;
+  }
 
     @Get
     public List<Vendor> index(@Valid Pageable pageable) {
-        return vendorRepository.findAll(pageable).getContent();
+        return vendorService.getAllVendors(pageable);
     }
 
     @Post
-    public HttpResponse<Vendor> create(@Body Vendor vendor) {
-        return HttpResponse.created(vendorRepository.create(vendor));
+    public HttpResponse<Vendor> create(@Valid @Body CreateVendor vendor) {
+        return HttpResponse.created(vendorService.createVendor(vendor));
     }
 
     @Get("/{vendorId}")
     public Optional<Vendor> read(BigInteger vendorId) {
-        return vendorRepository.findById(vendorId);
+        return vendorService.readVendor(vendorId);
     }
 
     @Put
     @Status(HttpStatus.NO_CONTENT)
-    public void update(@Body Vendor vendor) {
-        vendorRepository.update(vendor);
+    public void update(@Body UpdateVendor vendor) {
+        vendorService.updateVendor(vendor);
     }
 
     @Delete("/{vendorId}")
     @Status(HttpStatus.NO_CONTENT)
     public void delete(BigInteger vendorId) {
-        vendorRepository.deleteById(vendorId);
+        vendorService.deleteVendor(vendorId);
     }
 }

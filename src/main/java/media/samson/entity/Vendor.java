@@ -27,7 +27,13 @@ public class Vendor {
     }
 
     public Vendor(BigInteger vendorId, String name) {
+        // import
         this.vendorId = vendorId;
+        this.name = name;
+    }
+
+    public Vendor(String name) {
+        this.vendorId = null;
         this.name = name;
     }
 
