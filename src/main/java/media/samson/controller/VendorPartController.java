@@ -6,8 +6,10 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import media.samson.dto.CreateVendorPart;
+import media.samson.dto.UpdateVendorPart;
 import media.samson.entity.VendorPart;
-import media.samson.repository.VendorPartRepository;
+import media.samson.service.VendorPartService;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -16,36 +18,36 @@ import java.util.Optional;
 @Controller("/vendor-part")
 public class VendorPartController {
     @Inject
-    private final VendorPartRepository vendorPartRepository;
+    private final VendorPartService vendorPartService;
 
-    public VendorPartController(VendorPartRepository vendorPartRepository) {
-        this.vendorPartRepository = vendorPartRepository;
+    public VendorPartController(VendorPartService vendorPartService) {
+        this.vendorPartService = vendorPartService;
     }
 
     @Get
     public List<VendorPart> index(@Valid Pageable pageable) {
-        return vendorPartRepository.findAll(pageable).getContent();
+        return vendorPartService.getAllVendorParts(pageable);
     }
 
     @Post
-    public HttpResponse<VendorPart> create(@Body VendorPart vendorPart) {
-        return HttpResponse.created(vendorPartRepository.create(vendorPart));
+    public HttpResponse<VendorPart> create(@Body CreateVendorPart vendorPart) {
+        return HttpResponse.created(vendorPartService.createVendorPart(vendorPart));
     }
 
-    @Get("/{vendorId}")
-    public Optional<VendorPart> read(BigInteger vendorId) {
-        return vendorPartRepository.findById(vendorId);
+    @Get("/{vendorPartId}")
+    public Optional<VendorPart> read(BigInteger vendorPartId) {
+        return vendorPartService.readVendorPart(vendorPartId);
     }
 
     @Put
     @Status(HttpStatus.NO_CONTENT)
-    public void update(@Body VendorPart vendor) {
-        vendorPartRepository.update(vendor);
+    public void update(@Body UpdateVendorPart vendorPart) {
+        vendorPartService.updateVendorPart(vendorPart);
     }
 
-    @Delete("/{vendorId}")
+    @Delete("/{vendorPartId}")
     @Status(HttpStatus.NO_CONTENT)
-    public void delete(BigInteger vendorId) {
-        vendorPartRepository.deleteById(vendorId);
+    public void delete(BigInteger vendorPartId) {
+        vendorPartService.deleteVendorPart(vendorPartId);
     }
 }

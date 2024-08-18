@@ -30,8 +30,10 @@ public class VendorPart {
     @Setter
     private BigDecimal partPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "vendorId")
+    @Getter
+    @Setter
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "vendorId", referencedColumnName = "vendorId")
     private Vendor vendor;
 
     public VendorPart() {
@@ -40,17 +42,21 @@ public class VendorPart {
         this.partDescription = null;
     }
 
-    public VendorPart(BigInteger vendorPartId, String partName, String partDescription, BigDecimal partPrice) {
+    public VendorPart(BigInteger vendorPartId, String partName, String partDescription, BigDecimal partPrice, Vendor vendor) {
+        // import
         this.vendorPartId = vendorPartId;
         this.partName = partName;
         this.partDescription = partDescription;
         this.partPrice = partPrice;
+        this.vendor = vendor;
     }
 
-    public VendorPart(String partName, String partDescription, BigDecimal partPrice) {
+    public VendorPart(String partName, String partDescription, BigDecimal partPrice, Vendor vendor) {
+        // create
         this.vendorPartId = null;
         this.partName = partName;
         this.partDescription = partDescription;
         this.partPrice = partPrice;
+        this.vendor = vendor;
     }
 }
