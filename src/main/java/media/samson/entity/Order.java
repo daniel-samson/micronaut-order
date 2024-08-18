@@ -6,6 +6,7 @@ import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,14 +28,15 @@ public class Order {
 
         @Getter
         @Setter
-        @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+        @JoinColumn(name = "orderId", referencedColumnName = "orderId", insertable = true, updatable = false)
         private List<OrderLineItem> lineItems;
 
         // Constructors
 
         public Order() {
                 this.orderId = null;
-                this.status = Status.PENDING;
+                this.status = Status.CREATED;
         }
 
         public Order(BigInteger orderId, Status status, List<OrderLineItem> orderLineItems) {
@@ -43,8 +45,16 @@ public class Order {
                 this.lineItems = orderLineItems;
         }
 
+        public Order(BigInteger orderId, Status status) {
+                // create
+                this.orderId = orderId;
+                this.status = status;
+                this.lineItems = new ArrayList<OrderLineItem>();
+        }
+
         public enum Status {
                 CANCELLED,
+                CREATED,
                 PENDING,
                 SHIPPED,
                 DELIVERED

@@ -6,59 +6,73 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+import media.samson.dto.CreateOrderLineItem;
+import media.samson.dto.UpdateOrder;
+import media.samson.dto.UpdateOrderLineItem;
 import media.samson.entity.Order;
-import media.samson.repository.OrderLineItemRepository;
-import media.samson.repository.OrderRepository;
+import media.samson.entity.OrderLineItem;
+import media.samson.service.OrderService;
 
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 @Controller("/order")
 public class OrderController {
     @Inject
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
-    @Inject
-    private final OrderLineItemRepository orderLineItemRepository;
-
-    public OrderController(OrderRepository orderRepository, OrderLineItemRepository orderLineItemRepository) {
-        this.orderRepository = orderRepository;
-        this.orderLineItemRepository = orderLineItemRepository;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
     @Get
     public List<Order> index(@Valid Pageable pageable) {
-        return orderRepository.findAll(pageable).getContent();
+        return orderService.getAllOrders(pageable);
     }
 
     @Post
-    public HttpResponse<?> create(@Body() Order order) {
-        var created = orderRepository.create(order);
-        return HttpResponse.created(created);
+    public HttpResponse<?> create() {
+        return HttpResponse.ok(orderService.createOrder());
     }
 
-    @Get("/{id}")
-    public Optional<Order> read(BigInteger id) {
-        return orderRepository.findById(id);
+    @Get("/{orderId}")
+    public Optional<Order> read(BigInteger orderId) {
+        return orderService.readOrder(orderId);
     }
 
     @Put
     @Status(HttpStatus.NO_CONTENT)
-    public void update(@Body Order order) {
-        orderRepository.update(order);
+    public void update(@Body UpdateOrder order) {
+        orderService.updateOrder(order);
     }
 
-    @Delete("/{id}")
+    @Delete("/{orderId}")
     @Status(HttpStatus.NO_CONTENT)
-    public void delete(BigInteger id) {
-        orderRepository.deleteById(id);
+    public void delete(BigInteger orderId) {
+        orderService.deleteOrder(orderId);
+    }
+
+    @Get("/{orderId}/line-item")
+    public List<OrderLineItem> getLineItems(BigInteger orderId) {
+        return orderService.getOrderLineItems(orderId);
+    }
+
+
+    @Post("/{orderId}/line-item")
+    public OrderLineItem createLineItem(BigInteger orderId, CreateOrderLineItem createOrderLineItem) {
+        return orderService.createOrderLineItem(orderId, createOrderLineItem);
+    }
+
+    @Put("/{orderId}/line-item")
+    @Status(HttpStatus.NO_CONTENT)
+    public void updateLineItem(BigInteger orderId, UpdateOrderLineItem updateOrderLineItem) {
+        orderService.updateOrderLineItem(orderId, updateOrderLineItem);
     }
 
     @Delete("/{orderId}/line-item/{orderLineItemId}")
     @Status(HttpStatus.NO_CONTENT)
-    public void delete(BigInteger orderId, BigInteger orderLineItemId) {
-        orderLineItemRepository.deleteByOrderId(orderId, orderLineItemId);
+    public void deleteLineItem(BigInteger orderId, BigInteger orderLineItemId) {
+        orderService.deleteOrderLineItem(orderId, orderLineItemId);
     }
 }

@@ -21,10 +21,17 @@ public class OrderLineItem {
     @Setter
     private Integer quantity;
 
+
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "vendorPartId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderId", referencedColumnName = "orderId")
+    private Order order;
+
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "vendorPartId", insertable = false, updatable = false)
     private VendorPart vendorPart;
 
     public OrderLineItem() {
@@ -33,14 +40,23 @@ public class OrderLineItem {
     }
 
     public OrderLineItem(BigInteger orderLineItemId, Integer quantity, VendorPart vendorPart) {
+        // import
         this.orderLineItemId = orderLineItemId;
         this.quantity = quantity;
         this.vendorPart = vendorPart;
     }
 
-    public OrderLineItem(Integer quantity, VendorPart vendorPart) {
+    public OrderLineItem(Integer quantity, Order order, VendorPart vendorPart) {
+        // create
         this.orderLineItemId = null;
         this.quantity = quantity;
+        this.order = order;
         this.vendorPart = vendorPart;
+    }
+
+    public OrderLineItem(Integer quantity) {
+        // update
+        this.orderLineItemId = null;
+        this.quantity = quantity;
     }
 }
