@@ -12,7 +12,7 @@ import java.math.BigInteger;
 @Table(name = "order_line_items")
 public class OrderLineItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
     private BigInteger orderLineItemId;

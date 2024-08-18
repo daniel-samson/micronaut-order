@@ -13,7 +13,7 @@ import java.math.BigInteger;
 @Table(name = "vendor_parts")
 public class VendorPart {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
     private BigInteger vendorPartId;

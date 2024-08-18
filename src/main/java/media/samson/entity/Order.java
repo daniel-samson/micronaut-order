@@ -16,7 +16,7 @@ import java.util.List;
 public class Order {
         // Properties
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Getter
         @Setter
         private BigInteger orderId;

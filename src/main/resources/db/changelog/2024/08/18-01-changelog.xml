@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1723996473667-1" author="danielsamson">
+        <createTable tableName="order_line_items">
+            <column name="order_line_item_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order_line_items"/>
+            </column>
+            <column name="quantity" type="INT"/>
+            <column name="order_id" type="BIGINT"/>
+            <column name="vendor_part_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1723996473667-2" author="danielsamson">
+        <createTable tableName="orders">
+            <column name="order_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_orders"/>
+            </column>
+            <column name="status" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1723996473667-3" author="danielsamson">
+        <createTable tableName="vendor_parts">
+            <column name="vendor_part_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_vendor_parts"/>
+            </column>
+            <column name="part_name" type="VARCHAR(255)"/>
+            <column name="part_description" type="VARCHAR(255)"/>
+            <column name="part_price" type="DECIMAL(12, 2)"/>
+            <column name="vendor_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1723996473667-4" author="danielsamson">
+        <createTable tableName="vendors">
+            <column name="vendor_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_vendors"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1723996473667-5" author="danielsamson">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_line_items"
+                                 constraintName="FK_ORDER_LINE_ITEMS_ON_ORDERID" referencedColumnNames="order_id"
+                                 referencedTableName="orders" deleteCascade="true"/>
+    </changeSet>
+    <changeSet id="1723996473667-6" author="danielsamson">
+        <addForeignKeyConstraint baseColumnNames="vendor_part_id" baseTableName="order_line_items"
+                                 constraintName="FK_ORDER_LINE_ITEMS_ON_VENDORPARTID"
+                                 referencedColumnNames="vendor_part_id" referencedTableName="vendor_parts" deleteCascade="true"/>
+    </changeSet>
+    <changeSet id="1723996473667-7" author="danielsamson">
+        <addForeignKeyConstraint baseColumnNames="vendor_id" baseTableName="vendor_parts"
+                                 constraintName="FK_VENDOR_PARTS_ON_VENDORID" referencedColumnNames="vendor_id"
+                                 referencedTableName="vendors" deleteCascade="true"/>
+    </changeSet>
+</databaseChangeLog>
