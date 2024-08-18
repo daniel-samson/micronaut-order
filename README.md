@@ -7,6 +7,7 @@ A micro service to manage orders, written with the Micronaut Framework.
 - Java 22 Runtime / SDK
 - Gradle
 - Docker Compose
+- Liquibase
 
 ### Getting Started
 Before running the applications, you will need to start up the databases via docker compose:
