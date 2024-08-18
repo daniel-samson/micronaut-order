@@ -1,10 +1,11 @@
 package media.samson.repository;
 
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.jpa.operations.JpaRepositoryOperations;
 import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import media.samson.entity.Order;
 import media.samson.entity.OrderLineItem;
 
 import java.math.BigInteger;
@@ -13,31 +14,30 @@ import java.util.List;
 @Repository
 public abstract class OrderLineItemRepository implements CrudRepository<OrderLineItem, BigInteger> {
     @Inject
-    JpaRepositoryOperations operations;
+    private EntityManager entityManager;
 
     public OrderLineItem create(OrderLineItem orderLineItem) {
-        return this.save(orderLineItem);
+        return save(orderLineItem);
     }
 
-    public List<OrderLineItem> findAllByOrderId(BigInteger orderId) {
-        var em = operations.getCurrentEntityManager();
-        return em.createNativeQuery(
-                "select * from order_line_items where order_id = :orderId",
-                        OrderLineItem.class
-                )
-                .setParameter("orderId", orderId)
+    public List<OrderLineItem> findByOrder(Order order) {
+        String jpql = "SELECT oli FROM OrderLineItem oli WHERE oli.order = :order";
+        return entityManager.createQuery(jpql, OrderLineItem.class)
+                .setParameter("order", order)
                 .getResultList();
     }
 
-    @Transactional
-    public void deleteByOrderId(BigInteger orderId, BigInteger orderLineItemId) {
-        var em = operations.getCurrentEntityManager();
-        em.createNativeQuery(
-                        "DELETE FROM order_line_items " +
-                                "WHERE order_id = :orderId " +
-                                "AND order_line_item_id = :orderLineItemId")
-                .setParameter("orderId", orderId)
-                .setParameter("orderLineItemId", orderLineItemId)
+    public void deleteByOrderId(Order order, OrderLineItem orderLineItem) {
+        String jpql = "DELETE FROM OrderLineItem e WHERE e.order = :order AND e.orderLineItemId = :orderLineItemId";
+//        entityManager.createNativeQuery(
+//                        "DELETE FROM order_line_items " +
+//                                "WHERE order_id = :orderId " +
+//                                "AND order_line_item_id = :orderLineItemId")
+//                .setParameter("orderId", orderId)
+//                .setParameter("orderLineItemId", orderLineItemId)
+        entityManager.createQuery(jpql)
+                .setParameter("order", order)
+                .setParameter("orderLineItemId", orderLineItem.getOrderLineItemId())
                 .executeUpdate();
     }
 }

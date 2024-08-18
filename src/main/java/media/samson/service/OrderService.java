@@ -5,6 +5,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.exceptions.HttpStatusException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 import media.samson.dto.CreateOrderLineItem;
 import media.samson.dto.UpdateOrder;
 import media.samson.dto.UpdateOrderLineItem;
@@ -54,12 +55,12 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
+    @Transactional
     public List<OrderLineItem> getOrderLineItems(BigInteger orderId) {
-       if (!orderRepository.existsById(orderId)) {
-           throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Order not found");
-       };
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order not found"));
 
-        return orderLineItemRepository.findAllByOrderId(orderId);
+        return orderLineItemRepository.findByOrder(order);
     }
 
     public OrderLineItem createOrderLineItem(BigInteger orderId, CreateOrderLineItem createOrderLineItem) {
@@ -85,7 +86,7 @@ public class OrderService {
         var lineItem = orderLineItemRepository.findById(updateOrderLineItem.orderLineItemId())
                 .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order line item not found"));
 
-        if (!lineItem.getOrder().equals(order)) {
+        if (!lineItem.getOrder().getOrderId().equals(orderId)) {
             throw new HttpStatusException(HttpStatus.CONFLICT, "Order line item already belongs to another order");
         }
 
@@ -94,7 +95,12 @@ public class OrderService {
         orderLineItemRepository.update(lineItem);
     }
 
+    @Transactional
     public void deleteOrderLineItem(BigInteger orderId, BigInteger lineItemId) {
-        orderLineItemRepository.deleteByOrderId(orderId, lineItemId);
+        var order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order not found"));
+        var lineItem = orderLineItemRepository.findById(lineItemId)
+                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order line item not found"));
+        orderLineItemRepository.deleteByOrderId(order, lineItem);
     }
 }

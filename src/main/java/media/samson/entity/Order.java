@@ -26,12 +26,6 @@ public class Order {
         @Enumerated(EnumType.STRING)
         private Status status;
 
-        @Getter
-        @Setter
-        @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-        @JoinColumn(name = "orderId", referencedColumnName = "orderId", insertable = true, updatable = false)
-        private List<OrderLineItem> lineItems;
-
         // Constructors
 
         public Order() {
@@ -39,17 +33,10 @@ public class Order {
                 this.status = Status.CREATED;
         }
 
-        public Order(BigInteger orderId, Status status, List<OrderLineItem> orderLineItems) {
-                this.orderId = orderId;
-                this.status = status;
-                this.lineItems = orderLineItems;
-        }
-
         public Order(BigInteger orderId, Status status) {
                 // create
                 this.orderId = orderId;
                 this.status = status;
-                this.lineItems = new ArrayList<OrderLineItem>();
         }
 
         public enum Status {

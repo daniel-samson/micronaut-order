@@ -33,7 +33,7 @@ public class OrderController {
 
     @Post
     public HttpResponse<?> create() {
-        return HttpResponse.ok(orderService.createOrder());
+        return HttpResponse.created(orderService.createOrder());
     }
 
     @Get("/{orderId}")
@@ -60,13 +60,13 @@ public class OrderController {
 
 
     @Post("/{orderId}/line-item")
-    public OrderLineItem createLineItem(BigInteger orderId, CreateOrderLineItem createOrderLineItem) {
-        return orderService.createOrderLineItem(orderId, createOrderLineItem);
+    public HttpResponse<OrderLineItem> createLineItem(BigInteger orderId, @Body CreateOrderLineItem createOrderLineItem) {
+        return HttpResponse.created(orderService.createOrderLineItem(orderId, createOrderLineItem));
     }
 
     @Put("/{orderId}/line-item")
     @Status(HttpStatus.NO_CONTENT)
-    public void updateLineItem(BigInteger orderId, UpdateOrderLineItem updateOrderLineItem) {
+    public void updateLineItem(BigInteger orderId,  @Body UpdateOrderLineItem updateOrderLineItem) {
         orderService.updateOrderLineItem(orderId, updateOrderLineItem);
     }
 
