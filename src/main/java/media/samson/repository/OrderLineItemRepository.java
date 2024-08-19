@@ -29,12 +29,6 @@ public abstract class OrderLineItemRepository implements CrudRepository<OrderLin
 
     public void deleteByOrderId(Order order, OrderLineItem orderLineItem) {
         String jpql = "DELETE FROM OrderLineItem e WHERE e.order = :order AND e.orderLineItemId = :orderLineItemId";
-//        entityManager.createNativeQuery(
-//                        "DELETE FROM order_line_items " +
-//                                "WHERE order_id = :orderId " +
-//                                "AND order_line_item_id = :orderLineItemId")
-//                .setParameter("orderId", orderId)
-//                .setParameter("orderLineItemId", orderLineItemId)
         entityManager.createQuery(jpql)
                 .setParameter("order", order)
                 .setParameter("orderLineItemId", orderLineItem.getOrderLineItemId())
