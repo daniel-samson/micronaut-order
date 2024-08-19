@@ -20,9 +20,9 @@ public class VendorController {
     @Inject
     private final VendorService vendorService;
 
-  public VendorController(VendorService vendorService) {
-      this.vendorService = vendorService;
-  }
+    public VendorController(VendorService vendorService) {
+        this.vendorService = vendorService;
+    }
 
     @Get
     public List<Vendor> index(@Valid Pageable pageable) {

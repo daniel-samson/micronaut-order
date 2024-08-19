@@ -4,13 +4,11 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import media.samson.dto.*;
 import media.samson.entity.Order;
-import media.samson.entity.OrderLineItem;
 import media.samson.repository.OrderRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -152,7 +150,7 @@ public class OrderServiceTest {
                 new CreateOrderLineItem(1, vendorPart.getVendorPartId())
         );
 
-       orderService.deleteOrderLineItem(order.getOrderId(), lineItem.getOrderLineItemId());
+        orderService.deleteOrderLineItem(order.getOrderId(), lineItem.getOrderLineItemId());
         var lineItems = orderService.getOrderLineItems(order.getOrderId());
         assertTrue(lineItems.isEmpty());
     }

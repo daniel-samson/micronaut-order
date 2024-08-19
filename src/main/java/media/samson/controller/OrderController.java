@@ -66,7 +66,7 @@ public class OrderController {
 
     @Put("/{orderId}/line-item")
     @Status(HttpStatus.NO_CONTENT)
-    public void updateLineItem(BigInteger orderId,  @Body UpdateOrderLineItem updateOrderLineItem) {
+    public void updateLineItem(BigInteger orderId, @Body UpdateOrderLineItem updateOrderLineItem) {
         orderService.updateOrderLineItem(orderId, updateOrderLineItem);
     }
 

@@ -4,7 +4,6 @@ import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import media.samson.entity.Order;
 import media.samson.entity.OrderLineItem;
 

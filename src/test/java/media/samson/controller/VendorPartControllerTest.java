@@ -86,7 +86,7 @@ public class VendorPartControllerTest {
     public void testCreateInvalidVendorPart() {
         HttpRequest<?> request = HttpRequest.POST(
                 "/vendor-part"
-,                Collections.singletonMap("vendorPartId", new BigInteger("12")));
+                , Collections.singletonMap("vendorPartId", new BigInteger("12")));
 
         var response = assertThrows(HttpClientResponseException.class, () -> {
             client.toBlocking().exchange(request, Vendor.class);

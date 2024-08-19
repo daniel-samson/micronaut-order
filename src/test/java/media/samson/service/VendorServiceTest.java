@@ -1,6 +1,5 @@
 package media.samson.service;
 
-import io.micronaut.data.jpa.repository.JpaRepository;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import media.samson.dto.CreateVendor;

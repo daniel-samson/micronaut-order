@@ -9,15 +9,12 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import media.samson.entity.*;
-import media.samson.entity.Vendor;
 import media.samson.entity.Vendor;
 import media.samson.repository.VendorRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,7 +64,7 @@ public class VendorControllerTest {
     public void testCreateInvalidVendor() {
         HttpRequest<?> request = HttpRequest.POST(
                 "/vendor"
-,                Collections.singletonMap("vendorId", new BigInteger("12")));
+                , Collections.singletonMap("vendorId", new BigInteger("12")));
 
         assertThrows(HttpClientResponseException.class, () -> {
             HttpResponse<?> response = client.toBlocking().exchange(request, Vendor.class);

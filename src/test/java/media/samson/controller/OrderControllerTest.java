@@ -19,15 +19,11 @@ import media.samson.entity.Vendor;
 import media.samson.entity.VendorPart;
 import media.samson.repository.OrderLineItemRepository;
 import media.samson.repository.OrderRepository;
-import media.samson.repository.VendorPartRepository;
-import media.samson.repository.VendorRepository;
 import media.samson.service.OrderService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

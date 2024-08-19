@@ -50,7 +50,8 @@
     <changeSet id="1723996473667-6" author="danielsamson">
         <addForeignKeyConstraint baseColumnNames="vendor_part_id" baseTableName="order_line_items"
                                  constraintName="FK_ORDER_LINE_ITEMS_ON_VENDORPARTID"
-                                 referencedColumnNames="vendor_part_id" referencedTableName="vendor_parts" deleteCascade="true"/>
+                                 referencedColumnNames="vendor_part_id" referencedTableName="vendor_parts"
+                                 deleteCascade="true"/>
     </changeSet>
     <changeSet id="1723996473667-7" author="danielsamson">
         <addForeignKeyConstraint baseColumnNames="vendor_id" baseTableName="vendor_parts"
