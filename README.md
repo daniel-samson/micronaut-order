@@ -4,6 +4,9 @@ Micronaut Order
 
 A micro service to manage orders, written with the Micronaut Framework.
 
+![micronaut-order-arch](https://github.com/user-attachments/assets/f22c64a2-ee2b-4b47-b510-d4a2c4224fc6)
+
+
 
 ## Requirements
 - Java 22 Runtime / SDK
