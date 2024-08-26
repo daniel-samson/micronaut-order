@@ -6,7 +6,7 @@ A micro service to manage orders, written with the Micronaut Framework.
 
 ![micronaut-order-arch](https://github.com/user-attachments/assets/f22c64a2-ee2b-4b47-b510-d4a2c4224fc6)
 
-![micronaut-order-erd](https://github.com/user-attachments/assets/4549fb08-873e-43db-8bb9-ac36da2c1a0b)
+![micronaut-order-erd](https://github.com/user-attachments/assets/576680d6-7723-4e59-ad21-a78fce79aa28)
 
 
 ## Requirements
