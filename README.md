@@ -1,5 +1,7 @@
 Micronaut Order
 ====
+[![Java CI with Gradle (Groovy)](https://github.com/daniel-samson/micronaut-order/actions/workflows/gradle.yml/badge.svg)](https://github.com/daniel-samson/micronaut-order/actions/workflows/gradle.yml)
+
 A micro service to manage orders, written with the Micronaut Framework.
 
 
