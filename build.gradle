@@ -3,6 +3,7 @@ plugins {
     id("io.micronaut.application") version "4.4.2"
     id("io.micronaut.test-resources") version "4.4.2"
     id("io.micronaut.aot") version "4.4.2"
+    id("jacoco")
 }
 
 version = "0.1"
@@ -33,12 +34,15 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.34")
     testAnnotationProcessor ("org.projectlombok:lombok:1.18.34")
     testCompileOnly ("org.projectlombok:lombok:1.18.34")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
 
 application {
     mainClass = "media.samson.Application"
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
     targetCompatibility = JavaVersion.toVersion("21")
@@ -71,6 +75,22 @@ micronaut {
 
 tasks.named("dockerfileNative") {
     jdkVersion = "21"
+}
+
+//jacoco {
+//    toolVersion = "0.8.8" // Use the latest version available
+//}
+
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        html.outputLocation.set(file("build/reports/jacoco/test/html"))
+    }
 }
 
 
