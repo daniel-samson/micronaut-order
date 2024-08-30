@@ -1,6 +1,7 @@
 Micronaut Order
 ====
 [![Java CI with Gradle (Groovy)](https://github.com/daniel-samson/micronaut-order/actions/workflows/gradle.yml/badge.svg)](https://github.com/daniel-samson/micronaut-order/actions/workflows/gradle.yml)
+[![codecov](https://codecov.io/gh/daniel-samson/micronaut-order/graph/badge.svg?token=fyOiI0nEUN)](https://codecov.io/gh/daniel-samson/micronaut-order)
 
 A micro service to manage orders, written with the Micronaut Framework.
 
