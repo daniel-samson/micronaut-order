@@ -1,5 +1,7 @@
 package media.samson.service;
 
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import media.samson.dto.*;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,8 +91,7 @@ public class OrderServiceTest {
 
         var order = orderService.createOrder();
         var lineItem = orderService.createOrderLineItem(
-                order.getOrderId(),
-                new CreateOrderLineItem(1, vendorPart.getVendorPartId())
+                new CreateOrderLineItem(1, order.getOrderId(), vendorPart.getVendorPartId())
         );
 
         assertEquals(1, lineItem.getQuantity());
@@ -114,12 +116,10 @@ public class OrderServiceTest {
 
         var order = orderService.createOrder();
         var lineItem = orderService.createOrderLineItem(
-                order.getOrderId(),
-                new CreateOrderLineItem(1, vendorPart.getVendorPartId())
+                new CreateOrderLineItem(1, order.getOrderId(), vendorPart.getVendorPartId())
         );
 
         orderService.updateOrderLineItem(
-                order.getOrderId(),
                 new UpdateOrderLineItem(lineItem.getOrderLineItemId(), 2)
         );
         var lineItems = orderService.getOrderLineItems(order.getOrderId());
@@ -146,11 +146,10 @@ public class OrderServiceTest {
 
         var order = orderService.createOrder();
         var lineItem = orderService.createOrderLineItem(
-                order.getOrderId(),
-                new CreateOrderLineItem(1, vendorPart.getVendorPartId())
+                new CreateOrderLineItem(1, order.getOrderId(), vendorPart.getVendorPartId())
         );
 
-        orderService.deleteOrderLineItem(order.getOrderId(), lineItem.getOrderLineItemId());
+        orderService.deleteOrderLineItem(lineItem.getOrderLineItemId());
         var lineItems = orderService.getOrderLineItems(order.getOrderId());
         assertTrue(lineItems.isEmpty());
     }

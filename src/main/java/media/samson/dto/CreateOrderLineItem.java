@@ -8,6 +8,7 @@ import java.math.BigInteger;
 @Serdeable
 public record CreateOrderLineItem(
         Integer quantity,
+        BigInteger orderId,
         BigInteger vendorPartId
 ) {
 }
