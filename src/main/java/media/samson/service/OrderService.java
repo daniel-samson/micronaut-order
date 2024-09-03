@@ -63,8 +63,8 @@ public class OrderService {
         return orderLineItemRepository.findByOrder(order);
     }
 
-    public OrderLineItem createOrderLineItem(BigInteger orderId, CreateOrderLineItem createOrderLineItem) {
-        var order = orderRepository.findById(orderId)
+    public OrderLineItem createOrderLineItem(CreateOrderLineItem createOrderLineItem) {
+        var order = orderRepository.findById(createOrderLineItem.orderId())
                 .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order not found"));
 
         var vendorPart = vendorPartRepository.findById(createOrderLineItem.vendorPartId())
@@ -79,16 +79,9 @@ public class OrderService {
         return orderLineItemRepository.create(lineItem);
     }
 
-    public void updateOrderLineItem(BigInteger orderId, UpdateOrderLineItem updateOrderLineItem) {
-        var order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order not found"));
-
+    public void updateOrderLineItem(UpdateOrderLineItem updateOrderLineItem) {
         var lineItem = orderLineItemRepository.findById(updateOrderLineItem.orderLineItemId())
                 .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order line item not found"));
-
-        if (!lineItem.getOrder().getOrderId().equals(orderId)) {
-            throw new HttpStatusException(HttpStatus.CONFLICT, "Order line item already belongs to another order");
-        }
 
         lineItem.setQuantity(updateOrderLineItem.quantity());
 
@@ -96,11 +89,10 @@ public class OrderService {
     }
 
     @Transactional
-    public void deleteOrderLineItem(BigInteger orderId, BigInteger lineItemId) {
-        var order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order not found"));
+    public void deleteOrderLineItem(BigInteger lineItemId) {
         var lineItem = orderLineItemRepository.findById(lineItemId)
                 .orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Order line item not found"));
-        orderLineItemRepository.deleteByOrderId(order, lineItem);
+
+        orderLineItemRepository.delete(lineItem);
     }
 }

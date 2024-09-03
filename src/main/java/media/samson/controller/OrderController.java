@@ -59,20 +59,20 @@ public class OrderController {
     }
 
 
-    @Post("/{orderId}/line-item")
-    public HttpResponse<OrderLineItem> createLineItem(BigInteger orderId, @Body CreateOrderLineItem createOrderLineItem) {
-        return HttpResponse.created(orderService.createOrderLineItem(orderId, createOrderLineItem));
+    @Post("/line-item")
+    public HttpResponse<OrderLineItem> createLineItem(@Body CreateOrderLineItem createOrderLineItem) {
+        return HttpResponse.created(orderService.createOrderLineItem(createOrderLineItem));
     }
 
-    @Put("/{orderId}/line-item")
+    @Put("/line-item")
     @Status(HttpStatus.NO_CONTENT)
-    public void updateLineItem(BigInteger orderId, @Body UpdateOrderLineItem updateOrderLineItem) {
-        orderService.updateOrderLineItem(orderId, updateOrderLineItem);
+    public void updateLineItem(@Body UpdateOrderLineItem updateOrderLineItem) {
+        orderService.updateOrderLineItem(updateOrderLineItem);
     }
 
-    @Delete("/{orderId}/line-item/{orderLineItemId}")
+    @Delete("/line-item/{orderLineItemId}")
     @Status(HttpStatus.NO_CONTENT)
-    public void deleteLineItem(BigInteger orderId, BigInteger orderLineItemId) {
-        orderService.deleteOrderLineItem(orderId, orderLineItemId);
+    public void deleteLineItem(BigInteger orderLineItemId) {
+        orderService.deleteOrderLineItem(orderLineItemId);
     }
 }

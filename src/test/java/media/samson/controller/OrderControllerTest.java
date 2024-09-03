@@ -182,9 +182,10 @@ public class OrderControllerTest {
         var vendorPart = createPartResponse.getBody().get();
 
         HttpRequest<?> createLineItemRequest = HttpRequest.POST(
-                "/order/" + order.getOrderId() + "/line-item",
+                "/order/line-item",
                 new CreateOrderLineItem(
                         1,
+                        order.getOrderId(),
                         vendorPart.getVendorPartId()
                 )
         );
@@ -222,9 +223,10 @@ public class OrderControllerTest {
         var vendorPart = createPartResponse.getBody().get();
 
         HttpRequest<?> createLineItemRequest = HttpRequest.POST(
-                "/order/" + order.getOrderId() + "/line-item",
+                "/order/line-item",
                 new CreateOrderLineItem(
                         1,
+                        order.getOrderId(),
                         vendorPart.getVendorPartId()
                 )
         );
@@ -235,7 +237,7 @@ public class OrderControllerTest {
         var orderLineItem = createLineItemResponse.getBody().get();
 
         HttpRequest<?> updateLineItemRequest = HttpRequest.PUT(
-                "/order/" + order.getOrderId() + "/line-item",
+                "/order/line-item",
                 new UpdateOrderLineItem(
                         orderLineItem.getOrderLineItemId(),
                         2
@@ -274,9 +276,10 @@ public class OrderControllerTest {
         var vendorPart = createPartResponse.getBody().get();
 
         HttpRequest<?> createLineItemRequest = HttpRequest.POST(
-                "/order/" + order.getOrderId() + "/line-item",
+                "/order/line-item",
                 new CreateOrderLineItem(
                         1,
+                        order.getOrderId(),
                         vendorPart.getVendorPartId()
                 )
         );
@@ -287,7 +290,7 @@ public class OrderControllerTest {
         var orderLineItem = createLineItemResponse.getBody().get();
 
         HttpRequest<?> deleteLineItemRequest = HttpRequest.DELETE(
-                "/order/" + order.getOrderId() + "/line-item/" + orderLineItem.getOrderLineItemId());
+                "/order/line-item/" + orderLineItem.getOrderLineItemId());
         HttpResponse<?> deleteLineItemResponse = client.toBlocking().exchange(
                 deleteLineItemRequest,
                 OrderLineItem.class
