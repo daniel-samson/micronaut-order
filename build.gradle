@@ -91,6 +91,15 @@ tasks.jacocoTestReport {
         xml.required.set(true)
         html.outputLocation.set(file("build/reports/jacoco/test/html"))
     }
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            'media/samson/Application.class'
+                    ])
+                })
+        )
+    }
 }
 
 
